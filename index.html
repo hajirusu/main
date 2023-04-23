@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>&#26032;&#12375;&#12356;&#12479;&#12502;</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <label for="url">URL&#12434;&#20837;&#21147;&#12375;&#12390;&#12367;&#12384;&#12373;&#12356;&#12290;</label>
+    <input type="text" id="url" name="url" placeholder="https://bing.com">
+    <button onclick="generateIFrame()">Enter</button>
+    <br><br>
+    <div id="iframe-container"></div>
+    
+    <button onclick="toggleFullScreen()">Full Screen</button>
+    
+    <script>
+      var iframe = null;
+      
+      function generateIFrame() {
+        var url = document.getElementById("url").value;
+        iframe = '<iframe src="' + url + '" width="100%" height="720"></iframe>';
+        document.getElementById("iframe-container").innerHTML = iframe;
+      }
+      
+      function toggleFullScreen() {
+        if (iframe) {
+          var element = document.querySelector('iframe');
+          if (element.requestFullScreen) {
+            element.requestFullScreen();
+          } else if (element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen();
+          } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
