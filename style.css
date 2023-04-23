@@ -1,0 +1,52 @@
+/* 全体のスタイル */
+body {
+  font-family: Arial, sans-serif;
+  background-color: white;
+}
+
+/* 入力フィールドのスタイル */
+#url {
+  width: 25%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+/* ボタンのスタイル */
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* ボタンのマウスオーバー時のスタイル */
+button:hover {
+  background-color: #0069d9;
+}
+/* スクロールバーのスタイル */
+::-webkit-scrollbar {
+  width: 10px; /* スクロールバーの幅 */
+  height: 10px; /* スクロールバーの高さ */
+}
+
+/* スクロールバーのトラック */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* スクロールバーのトラックの背景色 */
+}
+
+/* スクロールバーのスロット */
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* スクロールバーのスロットの背景色 */
+  border-radius: 5px; /* スクロールバーのスロットの角丸 */
+}
+
+/* スクロールバーのコーナー */
+::-webkit-scrollbar-corner {
+  background-color: #f1f1f1; /* スクロールバーのコーナーの背景色 */
+}
