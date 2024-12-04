@@ -1,0 +1,338 @@
+/* スクロールバーの軌道-縦 */
+::-webkit-scrollbar-track:vertical {
+background: rgb(227,227,227);
+background: linear-gradient(90deg, rgba(227,227,227,1) 10%, rgba(241,241,241,1) 13%);
+}
+/* スクロールバーの軌道-横 */
+::-webkit-scrollbar-track:horizontal {
+background: rgb(227,227,227);
+background: linear-gradient(rgba(227,227,227,1) 10%, rgba(241,241,241,1) 13%);
+}
+/* スクロールバーの幅 */
+::-webkit-scrollbar{
+  width: 18px;
+}
+::-webkit-scrollbar-horizontal {
+ height: 18px;
+}
+/* 上矢印-縦 */
+::-webkit-scrollbar-button:start:decrement {
+  background: url('images/scrollbar/y/scrollbar_7_arrow-start.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+  height: 18px;
+}
+::-webkit-scrollbar-button:start:decrement:hover {
+  background: url('images/scrollbar/y/scrollbar_7_arrow-start-hover.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+}
+::-webkit-scrollbar-button:start:decrement:active {
+  background: url('images/scrollbar/y/scrollbar_7_arrow-start-active.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+}
+/* 下矢印-縦 */
+::-webkit-scrollbar-button:end:increment {
+  background: url('images/scrollbar/y/scrollbar_7_arrow-end.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+  height: 18px;
+}
+::-webkit-scrollbar-button:end:increment:hover {
+  background: url('images/scrollbar/y/scrollbar_7_arrow-end-hover.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+}
+::-webkit-scrollbar-button:end:increment:active {
+  background: url('images/scrollbar/y/scrollbar_7_arrow-end-active.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+}
+/* 左矢印-横 */
+::-webkit-scrollbar-button:horizontal:start:decrement {
+  background: url('images/scrollbar/x/scrollbar_7_arrow-left.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+  width: 18px;
+}
+::-webkit-scrollbar-button:horizontal:start:decrement:hover {
+  background: url('images/scrollbar/x/scrollbar_7_arrow-left-hover.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+}
+::-webkit-scrollbar-button:horizontal:start:decrement:active {
+  background: url('images/scrollbar/x/scrollbar_7_arrow-left-active.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+}
+/* 右矢印-横 */
+::-webkit-scrollbar-button:horizontal:end:increment {
+  background: url('images/scrollbar/x/scrollbar_7_arrow-right.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+  width: 18px;
+}
+::-webkit-scrollbar-button:horizontal:end:increment:hover {
+  background: url('images/scrollbar/x/scrollbar_7_arrow-right-hover.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+}
+::-webkit-scrollbar-button:horizontal:end:increment:active {
+  background: url('images/scrollbar/x/scrollbar_7_arrow-right-active.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+}
+
+/* 持ち手-縦 */
+::-webkit-scrollbar-thumb:vertical {
+  background: url('images/scrollbar/y/scrollbar_7_thumb.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+  border: solid 1px #959595;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:vertical:hover {
+  background: url('images/scrollbar/y/scrollbar_7_thumb-hover.png') center center no-repeat;
+  background-size: cover;
+  border: solid 1px #5d809c;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:vertical:active {
+  background: url('images/scrollbar/y/scrollbar_7_thumb-active.png') center center no-repeat;
+  background-size: cover;
+  border: solid 1px #4e7184;
+  border-radius: 2px;
+}
+/* 持ち手-横 */
+::-webkit-scrollbar-thumb:horizontal {
+  background: url('images/scrollbar/x/scrollbar_7_thumb.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+  border: solid 1px #959595;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:horizontal:hover {
+  background: url('images/scrollbar/x/scrollbar_7_thumb-hover.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+  border: solid 1px #959595;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:horizontal:active {
+  background: url('images/scrollbar/x/scrollbar_7_thumb-active.png') center center no-repeat;
+  background-size: cover;
+  box-sizing: content-box;
+  border: solid 1px #959595;
+  border-radius: 2px;
+}
+
+
+
+
+
+
+
+
+canvas#edgeCanvas {
+    width: 100%;
+    height: 100vh;
+    z-index: 1999;
+    position: fixed;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+    min-height: 0px;
+}
+img{
+    pointer-events: none;
+    user-select: none;
+}
+.logo-img{
+    padding: 10px;
+}
+h3.search_title_bar{
+    height: 37px;
+}
+
+
+div.mainarea{
+    background: url(images/random_bg/1.jpg) no-repeat;
+    background-size: cover;
+    background-position: top;
+}
+div#header{
+    background: white;
+    opacity: 100%;
+    height: 65px;
+}
+div#container {
+    transition: transform 2s;
+    margin: 0 auto;
+    padding: 0;
+    width: 955px;
+    text-align: left;
+    background: url(images/bg_main.gif) left top;
+    filter: drop-shadow(0px 0px 6px black);
+}
+div#mainContents{
+    background: url(images/img_fukidashi.png) left 70px no-repeat;
+    position: relative;
+}
+div.mainContents_in {
+    color: #333;
+    line-height: 1.4;
+    font-family: 'MS PGothic',Verdana, Arial,'qMmpS Pro W3','Hiragino Kaku Gothic Pro', Osaka, sans-serif;
+    word-break: break-all;
+    word-wrap: break-word;
+    text-align: left;
+    margin: 0;
+    font-size: 100%;
+    background: url(images/img_cocolo.png) right bottom no-repeat;
+    position: relative;
+    height: 488px;
+    margin-top: -70px;
+    z-index: 2;
+}
+
+
+
+div.search_mdl {
+    position: relative;
+    top: 270px !important;
+    line-height: 1.4;
+    font-family: 'MS PGothic',Verdana, Arial,'qMmpS Pro W3','Hiragino Kaku Gothic Pro', Osaka, sans-serif;
+    word-break: break-all;
+    word-wrap: break-word;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    padding-top: 10px;
+    padding-left: 20px;
+}
+div.search_mdl_in {
+    background: url(images/bg_search_main.png) left bottom no-repeat;
+    padding: 18px 16px 50px 24px;
+}
+#searchForm{
+    width: 390px;
+    height: 102px;
+    text-align: center;
+}
+#searchButton{
+    user-select: none;
+}
+#search_form{
+    font-size: 10px;
+}
+#form_text{
+    word-break: break-all;
+    word-wrap: break-word;
+    margin-bottom: 5px;
+    padding: 2px 0px;
+    width: 394px;
+    color: #444444;
+    font-family: "Meiryo UI";
+}
+#form_text:focus-visible{
+    outline: 0px;
+}
+#searchForm > p{
+    margin-bottom: 10px;
+    height: 3px;
+}
+.search_select{
+    margin-bottom: 5px;
+}
+.osusume-img{
+    margin-right: 10px;
+}
+
+
+
+
+div#kw_mdl{
+background: url(images/bg_kw.gif) left top;
+    border-top: #005b72 solid 1px;
+    padding: 20px;
+    position: relative;
+}
+h3.keyword_title_bar {
+    background: url(images/ttl_kwbg.gif) left top no-repeat;
+    position: relative;
+    z-index: 1;
+}
+.kw_mdl_in{
+    background: url(images/kw_bgbtm.gif) left bottom no-repeat;
+    padding: 0 0 1px;
+}
+.kw_mdl_main{
+    margin: 0;
+    background: url(images/cocolo2.gif) right bottom no-repeat;
+    padding: 1px 0 0;
+    position: relative;
+    z-index: 2;
+    margin-top: -40px;
+    min-height: 205px;
+}
+ul#keywordList{
+    text-align: left;
+    margin: 0;
+    list-style: none;
+    list-style: none;
+    padding: 60px 25px 25px 25px;
+    min-height: 400px;
+    width: 500px !important;
+    width/**/: 550px;
+}
+li{
+    display: inline;
+    margin-right: 10px;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+a:hover {
+    color: #eb41a3;
+}
+a{
+    color: #008cdb;
+}
+.txt1{
+    font-family: 'MS PGothic',Verdana, Arial,'qMmpS Pro W3','Hiragino Kaku Gothic Pro', Osaka, sans-serif;
+    list-style: none;
+    border: 0;
+    font-size: 1em;
+    line-height: 1.5em !important;
+    text-decoration: none !important;
+}
+.txt3{
+    font-family: 'MS PGothic',Verdana, Arial,'qMmpS Pro W3','Hiragino Kaku Gothic Pro', Osaka, sans-serif;
+    list-style: none;
+    border: 0;
+    font-size: 1.3em;
+    line-height: 1.5em !important;
+    text-decoration: none !important;
+}
+.txt5{
+    font-family: 'MS PGothic',Verdana, Arial,'qMmpS Pro W3','Hiragino Kaku Gothic Pro', Osaka, sans-serif;
+    list-style: none;
+    border: 0;
+    font-size: 1.6em;
+    line-height: 1.25em !important;
+    text-decoration: none !important;
+}
