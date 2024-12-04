@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="images/favicon.png">
+    <link href="cocolo.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+    <title>ココロサーチ@nifty</title>
+</head>
+<body bgcolor="black">
+
+<div id="mainarea" class="mainarea">
+	<div id="mainareain">
+		<div id="container">
+			<div id="header"><img class="logo-img" src="images/logo.gif"></div>
+		                <div id="mainContents">
+				<div class="mainContents_in" id="maincontents_in">
+					<div class="search_mdl">
+						<h3 class="search_title_bar"><img class="" src="images/ttl_search.png"  alt="ココロサーチ" ></h3>
+						<div  class="search_mdl_in">
+							<form name="cocolo_form" id="searchForm" method="get">
+						 		<span id="search_form">
+ 					       	 			<input id="form_text" maxlength="125" type="text" name="q" value="" placeholder="ここに探したいキーワードを入れてね♪" style="color:#444444;font-size:140%;line-height:1.3;">
+									<p class="search_select">
+										<span><input type="radio" id="osusume" name="search_select" value="osusume" checked /><label for="osusume"><img class="osusume-img" for="osusume" src="images/osusume.png"></label><input type="radio" id="google" name="search_select" value="google" /><label for="google"><img class="web-img" for="osusume" src="images/google.png"></label></span>
+									</p>
+						    	    	</span>		
+								<input type="image" id="searchButton" alt="ココロに探してもらう" title="ココロに探してもらう" value="検索" src="images/btn_search.gif" name="submit" hsrc="images/btn_search_on.gif" class="imgover">
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="contentsBtm">
+				<div id="kw_mdl">
+					<h3 class="keyword_title_bar">
+						<img src="images/ttl_kw.png" alt="人気のキーワード" title="人気のキーワード">
+					</h3>
+					<div class="kw_mdl_in">
+						<div class="kw_mdl_main">
+							<ul id="keywordList"></ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+    <!-- JavaScriptのコードをここに追加 -->
+<script type="text/javascript">
+// 最後の操作時間を記録する変数
+let lastActivityTime = Date.now();
+
+// 2分間の無操作後に遷移するURL
+const redirectUrl = 'https://thatdownnomorry.github.io/set/vista/vista.html';  // 適切なURLに変更してください
+
+// 2分間の無操作を検出するタイマーを設定
+function checkInactivity() {
+    const currentTime = Date.now();
+    const timeElapsed = currentTime - lastActivityTime;
+
+    if (timeElapsed > 5 * 60 * 1000) { // 5分 (300,000ミリ秒)
+        window.location.href = redirectUrl;
+    }
+}
+
+// 最後の操作時間を更新する関数
+function resetInactivityTimer() {
+    lastActivityTime = Date.now();
+}
+
+// ページのロード時にイベントリスナーを設定
+window.addEventListener('load', function() {
+
+    // ラジオボタンの選択を復元
+    const savedSearchOption = localStorage.getItem('selectedSearchOption');
+    if (savedSearchOption) {
+        document.getElementById(savedSearchOption).checked = true;
+    }
+
+// ラジオボタンの変更を監視して保存
+document.querySelectorAll('input[name="search_select"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        // ローカルストレージに選択した値を保存
+        localStorage.setItem('selectedSearchOption', this.value);
+
+        // 音声を再生
+        const audio = new Audio('sounds/se1.wav');
+        audio.play();
+    });
+});
+
+
+    // キーボード、マウスの動作、スクロールなどを検出してタイマーをリセット
+    document.addEventListener('keydown', resetInactivityTimer);
+    document.addEventListener('mousemove', resetInactivityTimer);
+    document.addEventListener('scroll', resetInactivityTimer);
+    document.addEventListener('click', resetInactivityTimer);
+    
+    // 定期的に無操作時間をチェックするタイマーを設定
+    setInterval(checkInactivity, 5000); // 5秒ごとにチェック
+});
+
+
+
+
+
+
+// 背景画像の候補リスト for mainarea
+const backgroundImagesMainArea = [
+    'url(images/random_bg/1.jpg)',
+    'url(images/random_bg/2.jpg)',
+    'url(images/random_bg/3.jpg)',
+    'url(images/random_bg/4.jpg)',
+    'url(images/random_bg/5.jpg)',
+    'url(images/random_bg/6.jpg)',
+    'url(images/random_bg/7.jpg)',
+    'url(images/random_bg/8.jpg)',
+    'url(images/random_bg/9.jpg)',
+    'url(images/random_bg/10.jpg)',
+    'url(images/random_bg/11.jpg)',
+    'url(images/random_bg/12.jpg)',
+    'url(images/random_bg/13.jpg)',
+    'url(images/random_bg/14.jpg)'
+];
+
+// 背景画像の候補リスト for kw_mdl_main
+const backgroundImagesKwMdlMain = [
+    'url(images/img_cocolo_s.png)',
+    'url(images/cocolo2.gif)'
+];
+
+
+// 特定の画像に対して#containerのCSSを設定する関数
+function adjustContainerStyleForSpecificImages(backgroundImage, containerElement) {
+    switch (backgroundImage) {
+        case 'url(images/random_bg/4.jpg)':
+            containerElement.style.opacity = '85%';
+            break;
+        case 'url(images/random_bg/14.jpg)':
+            containerElement.style.opacity = '85%';
+            break;
+        // 他の特定の画像に対するCSSを追加
+        default:
+            // デフォルトのスタイルを設定
+            containerElement.style.border = '';
+            containerElement.style.padding = '';
+            containerElement.style.backgroundColor = '';
+            break;
+    }
+}
+
+// ランダムな画像を選んで背景に適用する関数 for mainarea
+function setRandomBackgroundImageMainArea() {
+    const mainArea = document.querySelector('.mainarea');
+    const container = document.getElementById('container');
+    const randomImage = backgroundImagesMainArea[Math.floor(Math.random() * backgroundImagesMainArea.length)];
+    mainArea.style.backgroundImage = randomImage;
+
+    // 背景画像に応じた#containerのスタイルを調整
+    adjustContainerStyleForSpecificImages(randomImage, container);
+}
+
+// ランダムな画像を選んで背景に適用する関数 for kw_mdl_main
+function setRandomBackgroundImageKwMdlMain() {
+    const kwMdlMain = document.querySelector('.kw_mdl_main');
+    const container = document.getElementById('container');
+    const randomImage = backgroundImagesKwMdlMain[Math.floor(Math.random() * backgroundImagesKwMdlMain.length)];
+    kwMdlMain.style.backgroundImage = randomImage;
+
+    // 背景画像に応じた#containerのスタイルを調整
+    adjustContainerStyleForSpecificImages(randomImage, container);
+}
+
+// ページ読み込み時にランダムな背景画像を設定
+window.addEventListener('load', function() {
+    setRandomBackgroundImageMainArea();
+    setRandomBackgroundImageKwMdlMain();
+});
+
+
+
+
+
+document.getElementById('form_text').addEventListener('focus', function() {
+    this.placeholder = '';
+});
+
+document.getElementById('form_text').addEventListener('blur', function() {
+    if (this.value === '') {
+        this.placeholder = 'ここに探したいキーワードを入れてね♪';
+    }
+});
+
+
+
+
+document.getElementById('searchButton').addEventListener('click', function() {
+    const audio = new Audio('sounds/se2.wav');
+    audio.play();
+});
+
+
+
+document.getElementById('searchButton').addEventListener('click', function(event) {
+    event.preventDefault(); // フォームのデフォルトの送信を防ぐ
+    
+    const searchBox = document.getElementById('form_text');
+    const keyword = searchBox.value.trim();
+    const selectedSearchOption = document.querySelector('input[name="search_select"]:checked').value;
+
+    if (selectedSearchOption === 'osusume') {
+
+        // ＠ピザ
+        if (keyword === '@ぴざ' || keyword === '@ピザ' || keyword === '＠ぴざ' || keyword === '＠ピザ') {
+            window.open('https://www.pizza-la.co.jp/First.aspx', '_blank');
+            return;
+        }
+        // 1000chan
+        if (keyword === '1000ちゃん' || keyword === '1000chan' || keyword === 'おっ昼だぁ〜☆' || keyword === 'おっ昼だー' || keyword === 'おっひるだー') {
+            window.open('https://1000chan.jp/index.html', '_blank');
+            return;
+        }
+        // 7-Zip
+        if (keyword === '7-Zip' || keyword === '7-zip' || keyword === '7zip' || keyword === '7Zip' || keyword === '7ZIP' || keyword === '7Z' || keyword === '7z' ) {
+            window.open('https://7-zip.opensource.jp/', '_blank');
+            return;
+        }
+        // Amazon
+        if (keyword === 'Amazon' || keyword === 'AMAZON' || keyword === 'amazon' || keyword === 'あまぞん' || keyword === 'アマゾン' || keyword === '密林' || keyword === 'みつりん' || keyword === 'miturin' || keyword === 'mitsurin') {
+            window.open('https://www.amazon.co.jp/', '_blank');
+            return;
+        }
+        // AMD
+        if (keyword === 'AMD' || keyword === 'Amd' || keyword === 'amd' || keyword === 'あむど' || keyword === 'あｍｄ') {
+            window.open('https://www.amd.com/ja.html', '_blank');
+            return;
+        }
+        // Aol.
+        if (keyword === 'Aol.' || keyword === 'AOL.' || keyword === 'aol.' || keyword === 'Aol' || keyword === 'AOL' || keyword === 'aol') {
+            window.open('https://www.aol.com/', '_blank');
+            return;
+        }
+        // Aol.
+        if (keyword === 'ASRock' || keyword === 'Asrock.' || keyword === 'asrock.' || keyword === 'ASROCK' || keyword === 'ASrock' || keyword === 'AsRock' || keyword === 'アスロック' || keyword === 'あすろっく') {
+            window.open('https://www.asrock.com/index.jp.asp', '_blank');
+            return;
+        }
+        // AviUtl
+        if (keyword === 'AviUtl' || keyword === 'Aviutl' || keyword === 'aviutl' || keyword === 'AVIUTL') {
+            window.open('https://spring-fragrance.mints.ne.jp/aviutl/', '_blank');
+            return;
+        }
+        // BIGLOBE
+        if (keyword === 'BIGLOBE' || keyword === 'Biglobe' || keyword === 'biglobe' || keyword === 'ビッグローブ' || keyword === 'びっぐろーぶ') {
+            window.open('https://www.biglobe.ne.jp/', '_blank');
+            return;
+        }
+        // Bing
+        if (keyword === 'Bing' || keyword === 'BING' || keyword === 'bing') {
+            window.open('https://www.bing.com/', '_blank');
+            return;
+        }
+        // CINEBENCH R15
+        if (keyword === 'Cinebench 2003' || keyword === 'cinebench 2003' || keyword === 'CINEBENCH 2003' || keyword === 'Cinebench2003' || keyword === 'cinebench2003' || keyword === 'CINEBENCH2003') {
+            window.open('downloads/cinebench-[Guru3D.com].zip', '_blank');
+            return;
+        }
+        // CINEBENCH R15
+        if (keyword === 'Cinebench R15' || keyword === 'cinebench r15' || keyword === 'CINEBENCH R15' || keyword === 'cinebench R15') {
+            window.open('downloads/CINEBENCH_R15_Guru3D.zip', '_blank');
+            return;
+        }
+        // クックパッド
+        if (keyword === 'Cookpad' || keyword === 'COOKPAD' || keyword === 'cookpad' || keyword === 'クックパッド' || keyword === 'くっくぱっど' ) {
+            window.open('https://cookpad.com/jp', '_blank');
+            return;
+        }
+        if (keyword === 'CoreTemp' || keyword === 'Core Temp' || keyword === 'core temp' || keyword === 'Core temp' || keyword === 'CORE TEMP' || keyword === 'coretemp' || keyword === 'Coretemp' || keyword === 'CORETEMP') {
+            window.open('https://www.alcpu.com/CoreTemp/', '_blank');
+            return;
+        }
+        // cpu_bench
+        if (keyword === 'cpu_bench') {
+            window.open('https://thatdownnomorry.github.io/set/cpu_bench.html', '_blank');
+            return;
+        }
+        // CPU-Z
+        if (keyword === 'CPU-Z' || keyword === 'Cpu-z' || keyword === 'Cpu-Z' || keyword === 'cpu-z' || keyword === 'CPUZ' || keyword === 'Cpuz' || keyword === 'cpuz') {
+            window.open('https://www.cpuid.com/softwares/cpu-z.html', '_blank');
+            return;
+        }
+        // Debian
+        if (keyword === 'Debian' || keyword === 'DEBIAN' || keyword === 'debian') {
+            window.open('https://www.debian.or.jp/', '_blank');
+            return;
+        }
+        // Debian
+        if (keyword === 'DramGarden' || keyword === 'ＤｒａｍＧａｒｄｅｎ') {
+            window.open('https://nac.sakura.ne.jp/', '_blank');
+            return;
+        }
+        // Excite
+        if (keyword === 'Excite' || keyword === 'EXCITE' || keyword === 'excite' || keyword === 'エキサイト' || keyword === 'えきさいと') {
+            window.open('https://www.excite.co.jp/', '_blank');
+            return;
+        }
+        // foxconn
+        if (keyword === 'foxconn' || keyword === 'FOXCONN' || keyword === 'Foxconn' ||  keyword === 'ふぉっくすこん' || keyword === 'フォックスコン' || keyword === 'ふぉっくす紺子') {
+            window.open('http://konko.iinaa.net/index.html', '_blank');
+            return;
+        }
+        // goo
+        if (keyword === 'goo' || keyword === 'Goo' || keyword === 'GOO' ||  keyword === 'ぐー' || keyword === 'グー') {
+            window.open('https://www.goo.ne.jp/', '_blank');
+            return;
+        }
+        // Google
+        if (keyword === 'Google' || keyword === 'google' || keyword === 'GOOGLE' || keyword === 'ぐーぐる' || keyword === 'グーグル') {
+            window.open('https://www.google.co.jp', '_blank');
+            return;
+        }
+        // HWBot
+        if (keyword === 'HWBot' || keyword === 'HWbot' || keyword === 'Hwbot' || keyword === 'hwbot' || keyword === 'HWBOT') {
+            window.open('https://hwbot.org/', '_blank');
+            return;
+        }
+        // infoseek
+        if (keyword === 'Infoseek' || keyword === 'INFOSEEK' || keyword === 'infoseek' || keyword === 'インフォシーク') {
+            window.open('https://www.infoseek.co.jp/', '_blank');
+            return;
+        }
+        // ITmedia
+        if (keyword === 'Intel' || keyword === 'intel' || keyword === 'INTEL' || keyword === 'いんてる' || keyword === 'インテル') {
+            window.open('https://www.intel.co.jp/content/www/jp/ja/homepage.html', '_blank');
+            return;
+        }
+        // ITmedia
+        if (keyword === 'ITmedia' || keyword === 'ITMEDIA' || keyword === 'itmedia' || keyword === 'ITメディア' || keyword === 'Itメディア' || keyword === 'itメディア') {
+            window.open('https://www.itmedia.co.jp/', '_blank');
+            return;
+        }
+        // Key
+        if (keyword === 'Key' || keyword === 'kEy' || keyword === 'KEY' || keyword === 'key') {
+            window.open('https://key.visualarts.gr.jp/', '_blank');
+            return;
+        }
+        // Linux
+        if (keyword === 'Linux' || keyword === 'LINUX' || keyword === 'linux' || keyword === 'りなっくす' || keyword === 'リナックス') {
+            window.open('https://www.linux.org/', '_blank');
+            return;
+        }
+        // Livedoor
+        if (keyword === 'Livedoor' || keyword === 'LIVEDOOR' || keyword === 'livedoor' || keyword === 'ライブドア') {
+            window.open('https://www.livedoor.com/', '_blank');
+            return;
+        }
+        // mixi
+        if (keyword === 'MIXI' || keyword === 'Mixi' || keyword === 'mixi') {
+            window.open('https://mixi.jp/', '_blank');
+            return;
+        }
+        // Ｍａｓｓａ-
+        if (keyword === 'Ｍａｓｓａ-' || keyword === 'massa-') {
+            window.open('http://www6.plala.or.jp/Massa-/index.html', '_blank');
+            return;
+        }
+        // mercari
+        if (keyword === 'mercari' || keyword === 'MERCARI' || keyword === 'Mercari' || keyword === 'メルカリ' || keyword === 'めるかり' || keyword === 'merukari'  || keyword === 'Merukari'  || keyword === 'MERUKARI') {
+            window.open('https://jp.mercari.com/', '_blank');
+            return;
+        }
+        // MSN
+        if (keyword === 'msn' || keyword === 'MSN' || keyword === 'Msn') {
+            window.open('https://www.msn.com/ja-jp', '_blank');
+            return;
+        }
+        // @nifty
+        if (keyword === '@nifty' || keyword === '@Nifty' || keyword === '@NIFTY' || keyword === 'nifty' || keyword === 'Nifty' || keyword === 'NIFTY' || keyword === 'ニフティ') {
+            window.open('https://www.nifty.com/', '_blank');
+            return;
+        }
+        // Netscape
+        if (keyword === 'Netscape' || keyword === 'NETSCAPE' || keyword === 'netscape' || keyword === 'ネットスケープ' || keyword === 'ネスケ') {
+            window.open('https://isp.netscape.com/', '_blank');
+            return;
+        }
+        // Nsen
+        if (keyword === 'Nsen' || keyword === 'クルーズ' || keyword === 'くるーず') {
+            window.open('https://site.live.nicovideo.jp/cruise.html', '_blank');
+            return;
+        }
+        // OCN
+        if (keyword === 'OCN' || keyword === 'ocn' || keyword === 'Ocn') {
+            window.open('https://www.ocn.ne.jp/', '_blank');
+            return;
+        }
+        // ODN
+        if (keyword === 'ODN' || keyword === 'odn' || keyword === 'Odn') {
+            window.open('https://www.odn.ne.jp/', '_blank');
+            return;
+        }
+        // The oldhouse
+        if (keyword === 'The oldhouse' || keyword === 'oldhouse' || keyword === 'Oldhouse') {
+            window.open('http://oldhouse.s16.xrea.com/', '_blank');
+            return;
+        }
+        // PC Watch
+        if (keyword === 'PC Watch' || keyword === 'PC WATCH' || keyword === 'pc watch' || keyword === 'PCwatch' || keyword === 'Pcwatch' || keyword === 'pcwatch') {
+            window.open('https://pc.watch.impress.co.jp/', '_blank');
+            return;
+        }
+        // Pixiv
+        if (keyword === 'Pixiv' || keyword === 'pixiv' || keyword === 'PIXIV' || keyword === 'ピクシブ' || keyword === 'ぴくしぶ' || keyword === 'pikusibu') {
+            window.open('https://www.pixiv.net/', '_blank');
+            return;
+        }
+        // Python
+        if (keyword === 'Python' || keyword === 'python' || keyword === 'PYTHON' || keyword === 'パイソン' || keyword === 'ぱいそん' || keyword === 'paison') {
+            window.open('https://www.python.org/', '_blank');
+            return;
+        }
+        // Q4OS
+        if (keyword === 'Q4OS' || keyword === 'Q4os' || keyword === 'q4os') {
+            window.open('https://q4os.org/', '_blank');
+            return;
+        }
+        // superpi
+        if (keyword === 'スーパーπ' || keyword === 'SuperPi' || keyword === 'superpi' || keyword === 'superpi' || keyword === 'super_pi') {
+            window.open('downloads/super_pi.lzh', '_blank');
+            return;
+        }
+        // SOS団
+        if (keyword === 'ＳＯＳ団' || keyword === 'SOS団' || keyword === 'sos団') {
+            window.open('http://www.haruhi.tv/', '_blank');
+            return;
+        }
+        // SSP
+        if (keyword === 'SSP' || keyword === 'Ssp' || keyword === 'ssp') {
+            window.open('https://ssp.shillest.net/', '_blank');
+            return;
+        }
+        // Twitter
+        if (keyword === 'Twitter' || keyword === 'twitter' || keyword === 'TWITTER' || keyword === 'ついったー') {
+            window.open('https://twitter.com/', '_blank');
+            return;
+        }
+        // Ubuntu
+        if (keyword === 'Ubuntu' || keyword === 'ubuntu' || keyword === 'UBUNTU') {
+            window.open('https://www.ubuntulinux.jp/', '_blank');
+            return;
+        }
+        // VLC
+        if (keyword === 'Vlc' || keyword === 'vlc' || keyword === 'VLC'  || keyword === 'VLC media player' || keyword === 'Vlc Media Player' || keyword === 'vlc media player' || keyword === 'VLC MEDIA PLAYER'  || keyword === 'VLCmediaplayer' || keyword === 'VLCMediaPlayer' || keyword === 'Vlcmediaplayer' || keyword === 'VlcMediaPlayer' || keyword === 'vlcmediaplayer' || keyword === 'VLCMEDIAPLAYER') {
+            window.open('https://www.videolan.org/vlc/index.ja.html', '_blank');
+            return;
+        }
+        // Yahoo!
+        if (keyword === 'Y!' || keyword === 'y!' || keyword === 'Yahoo!' || keyword === 'yahoo!' || keyword === 'YAHOO!' || keyword === 'ヤフー' || keyword === 'やふー' || keyword === 'Yahoo' || keyword === 'YAHOO' || keyword === 'yahoo') {
+            window.open('https://www.yahoo.co.jp/', '_blank');
+            return;
+        }
+        // Yahoo!オークション
+        if (keyword === 'Yahoo!オークション' || keyword === 'Yahooオークション' || keyword === 'yahooオークション' || keyword === 'ヤフーオークション' || keyword === 'ヤフオク' || keyword === 'やふおく' || keyword === 'オークション' || keyword === 'おーくしょん'  || keyword === 'オク' || keyword === 'o-kusyonn' || keyword === 'yafuoku' || keyword === 'yahuoku' || keyword === 'Yahooauction' || keyword === 'yahooauction' || keyword === 'Yahooauctions' || keyword === 'yahooauctions') {
+            window.open('https://auctions.yahoo.co.jp/', '_blank');
+            return;
+        }
+        // YouTube
+        if (keyword === 'YouTube' || keyword === 'Youtube' || keyword === 'YOUTUBE' || keyword === 'youtube' || keyword === 'You Tube' || keyword === 'You tube' || keyword === 'YOU TUBE' || keyword === 'you tube' || keyword === 'TUBE' || keyword === 'Tube'  || keyword === 'tube' || keyword === 'つべ' || keyword === 'ようつべ' || keyword === 'ゆーちゅーぶ' || keyword === 'ユーチューブ') {
+            window.open('https://www.youtube.com/', '_blank');
+            return;
+        }
+        // Wikipedia
+        if (keyword === 'Wikipedia' || keyword === 'WIKIPEDIA' || keyword === 'wikipedia' || keyword === 'Wiki' || keyword === 'wiki' || keyword === 'ウィキペディア' || keyword === 'うぃきぺでぃあ' || keyword === 'ウィキ') {
+            window.open('https://ja.wikipedia.org/', '_blank');
+            return;
+        }
+        // Windows93
+        if (keyword === 'Windows93' || keyword === 'WINDOWS93' || keyword === 'windows93') {
+            window.open('https://www.windows93.net/', '_blank');
+            return;
+        }
+        // あかね色に染まる坂
+        if (keyword === 'あかね色に染まる坂' || keyword === 'akasaka') {
+            window.open('https://www.marv.jp/special/akasaka/index.html', '_blank');
+            return;
+        }
+        // 雷レーダー
+        if (keyword === '雷レーダー' || keyword === '雷' || keyword === 'かみなり') {
+            window.open('https://weather.yahoo.co.jp/weather/zoomradar/lightning/', '_blank');
+            return;
+        }
+        // 北森瓦版
+        if (keyword === '北森瓦版') {
+            window.open('https://northwood.blog.fc2.com/', '_blank');
+            return;
+        }
+        // 鯨神のティアスティラ
+        if (keyword === '鯨神のティアスティラ') {
+            window.open('https://whirlpool.co.jp/tearstilla/', '_blank');
+            return;
+        }
+        // クドわふたー
+        if (keyword === 'クドわふたー' || keyword === 'くどわふたー' || keyword === 'わふー' || keyword === 'わふー！' || keyword === 'wafu-' || keyword === 'wahu-' || keyword === 'kudwafter' || keyword === 'kudowahuta-' || keyword === 'kudowafuta-') {
+            window.open('https://key.visualarts.gr.jp/kudo/', '_blank');
+            return;
+        }
+        // こどものじかん
+        if (keyword === 'こどものじかん' || keyword === 'こじか' || keyword === 'kodomonojikan') {
+            window.open('https://www.kojika-anime.com/', '_blank');
+            return;
+        }
+        // 厚生労働省推奨
+        if (keyword === '厚生労働省推奨') {
+            window.open('https://unisonshift.amusecraft.com/products/project13/main.html', '_blank');
+            return;
+        }
+        // すのこタン
+        if (keyword === '情報科' || keyword === 'jouhouka' || keyword === 'zyouhouka') {
+            window.open('http://www.johoka.net/', '_blank');
+            return;
+        }
+        // すくいぬ
+        if (keyword === 'すえぞう' || keyword === 'suezou') {
+            window.open('http://www.suezou-net.com', '_blank');
+            return;
+        }
+        // すくいぬ
+        if (keyword === 'すくいぬ' || keyword === 'sukuinu') {
+            window.open('http://suiseisekisuisui.blog107.fc2.com/', '_blank');
+            return;
+        }
+        // すのこタン
+        if (keyword === 'すのこ' || keyword === 'すのこタン' || keyword === 'すのこたん' || keyword === 'すのこタン。') {
+            window.open('https://www.sunokotan.com/', '_blank');
+            return;
+        }
+        // タワー
+        if (keyword === 'タワー') {
+            window.open('http://www7.plala.or.jp/tower/index.html', '_blank');
+            return;
+        }
+        // だんぼーるはうすinブログ
+        if (keyword === 'だんぼーるはうすinブログ' || keyword === 'だんぼーるはうす') {
+            window.open('https://lunchbox360.livedoor.biz/', '_blank');
+            return;
+        }
+        // ちゆ１２歳
+        if (keyword === 'ちゆ１２歳' || keyword === 'ちゆ' || keyword === 'ちゆ12歳' || keyword === 'Tiyu' || keyword === 'tiyu') {
+            window.open('http://tiyu.to/', '_blank');
+            return;
+        }
+        // ちぇりーたくあん
+        if (keyword === 'ちぇりーたくあん') {
+            window.open('https://cherry-takuan.org/', '_blank');
+            return;
+        }
+        // ティンクル☆くるせいだーす
+        if (keyword === 'ティンクル☆くるせいだーす' || keyword === 'てぃんくるくるせいだーす' || keyword === 'ティンクルくるせいだーす') {
+            window.open('https://www.lillian.jp/kurukuru/', '_blank');
+            return;
+        }
+        // 地理院地図
+        if (keyword === '地理院地図' || keyword === 'ちりいんちず' || keyword === 'tiriintizu' || keyword === 'tiriinntizu') {
+            window.open('https://maps.gsi.go.jp/', '_blank');
+            return;
+        }
+        // 通信用語の基礎知識
+        if (keyword === '通信用語の基礎知識') {
+            window.open('https://www.wdic.org/', '_blank');
+            return;
+        }
+        // 月は東に日は西に
+        if (keyword === '月は東に日は西に' || keyword === 'はにはに' || keyword === 'tsukihahigashinihihanishini') {
+            window.open('https://august-soft.com/hani/', '_blank');
+            return;
+        }
+        // 天気
+        if (keyword === '天気' || keyword === 'お天気' || keyword === 'てんき' || keyword === 'おてんき' || keyword === 'tenki') {
+            window.open('https://tenki.jp/', '_blank');
+            return;
+        }
+        // '電波とどいた？
+        if (keyword === '電波とどいた？' || keyword === '電波とどいた?') {
+            window.open('https://ruriko.denpa.org/', '_blank');
+            return;
+        }
+        // 天神乱漫
+        if (keyword === '天神乱漫' || keyword === 'tenshinranman' || keyword === '＼（　＾ヮ゜）＞') {
+            window.open('http://www.yuzusoft-sour.com/products/tenhgl/', '_blank');
+            return;
+        }
+        // 東北一人暮らし
+        if (keyword === '東北一人暮らし') {
+            window.open('http://www.yyy-sendai.net/', '_blank');
+            return;
+        }
+        // なつみSTEP!
+        if (keyword === 'なつみSTEP!' || keyword === 'なつみSTEP') {
+            window.open('http://koshiandoh.com/flash-gallery01/natsumi-step/', '_blank');
+            return;
+        }
+        // ななこの
+        if (keyword === 'ななみとこのみのおしえてA・B・C' || keyword === 'ななみとこのみのおしえてABC' || keyword === 'ななこの') {
+            window.open('https://studio-ring.product.co.jp/abc_hd/index.html', '_blank');
+            return;
+        }
+        // ニコニコ
+        if (keyword === 'ニコニコ' || keyword === 'NICONICO' || keyword === 'Niconico' || keyword === 'niconico') {
+            window.open('https://nicovideo.jp/', '_blank');
+            return;
+        }
+        // ニコニコ大百科
+        if (keyword === 'ニコニコ大百科' || keyword === '大百科' || keyword === 'daihyakka') {
+            window.open('https://dic.nicovideo.jp/', '_blank');
+            return;
+        }
+        // ニコニコ動画
+        if (keyword === 'ニコニコ動画' || keyword === 'ニコ動' || keyword === 'にこどう' || keyword === 'にこにこどうが' || keyword === 'nicovideo' || keyword === 'nnd' || keyword === 'NND' || keyword === 'Nnd') {
+            window.open('https://nicovideo.jp/video_top', '_blank');
+            return;
+        }
+        // ニコニコ生放送
+        if (keyword === 'ニコニコ生放送' || keyword === 'ニコ生' || keyword === 'にこなま' || keyword === 'niconama') {
+            window.open('https://live.nicovideo.jp/', '_blank');
+            return;
+        }
+        // smid
+        const pattern = /^(https?:\/\/)?(www\.)?nicovideo\.jp\/watch\/(sm|nm|ca|cw|nl|so)\d+$/;
+        const keywordPattern = /^(sm|nm|ca|cw|nl|so)\d+$/;
+        if (pattern.test(keyword) || keywordPattern.test(keyword)) {
+            const videoId = keyword.replace(/^(https?:\/\/)?(www\.)?nicovideo\.jp\/watch\//, '');
+            window.open(`https://www.nicovideo.jp/watch/${videoId}`, '_blank');
+            return;
+        }
+        // ニコニコ生放送
+        if (keyword === 'ねこまた探偵社') {
+            window.open('https://hp.vector.co.jp/authors/VA015353/h_index.html', '_blank');
+            return;
+        }
+        // 乗換案内
+        if (keyword === '乗換案内' || keyword === '乗換' || keyword === '乗り換え' || keyword === 'のりかえ' || keyword === 'norikae') {
+            window.open('https://transit.yahoo.co.jp/', '_blank');
+            return;
+        }
+        // はじいしゃ
+        if (keyword === 'はじめてのおいしゃさん' || keyword === 'はじいしゃ' || keyword === 'hazimetenooisyasan' || keyword === 'hajimetenooishasan'  || keyword === 'hajirusu') {
+            window.open('https://zero.product.co.jp/products/oisyasan/', '_blank');
+            return;
+        }
+        // はじるす
+        if (keyword === 'はじめてのおるすばん' || keyword === 'はじるす' || keyword === 'hazimetenoorusuban' || keyword === 'hajimetenoorusuban'  || keyword === 'hajirusu') {
+            window.open('https://zero.product.co.jp/products/rusuban/', '_blank');
+            return;
+        }
+        // はてなブックマーク
+        if (keyword === 'b!' || keyword === 'B!' || keyword === 'はてなブックマーク' || keyword === 'はてなぶっくまーく' || keyword === 'はてブ' || keyword === 'はてぶ' || keyword === 'hatenabookmark' || keyword === 'Hatena Bookmark') {
+            window.open('https://b.hatena.ne.jp/', '_blank');
+            return;
+        }
+        // 一休み
+        if (keyword === '一休み' || keyword === '一休' || keyword === 'hitoyasumi') {
+            window.open('https://ikyu.sakura.ne.jp/', '_blank');
+            return;
+        }
+        // 富士山
+        if (keyword === '富士山') {
+            window.open('http://live-fuji.jp/', '_blank');
+            return;
+        }
+        // 日本放置協会
+        if (keyword === '日本放置協会' || keyword === '放置') {
+            window.open('http://www.max.hi-ho.ne.jp/mao_h/nhk/', '_blank');
+            return;
+        }
+        // マイリスト
+        if (keyword === 'マイリスト' || keyword === 'マイリス' || keyword === 'まいりす' || keyword === 'mairisu'  || keyword === 'mylist') {
+            window.open('https://www.nicovideo.jp/my/mylist', '_blank');
+            return;
+        }
+        // ましろ色シンフォニー
+        if (keyword === 'ましろ色シンフォニー' || keyword === 'mashiroiro' || keyword === 'masiroiro' || keyword === 'mashiroiroshinfoni-' || keyword === 'masiroirosinfoni-') {
+            window.open('https://palette.clearrave.co.jp/product/mashiro-project/', '_blank');
+            return;
+        }
+        // MSI
+        if (keyword === 'MSI' || keyword === 'Msi' || keyword === 'msi' || keyword === '美星 藍' || keyword === '美星藍' || keyword === 'みほしあい' || keyword === 'mihoshiai' || keyword === 'mihosiai' || keyword === 'Mihoshiai' || keyword === 'Mihosiai') {
+            window.open('https://web.archive.org/web/20110624234108/http://www.msi-computer.co.jp/info/moe/', '_blank');
+            return;
+        }
+        // 野望のからくり屋敷
+        if (keyword === '野望のからくり屋敷') {
+            window.open('https://yabou-karakuri.sakura.ne.jp/', '_blank');
+            return;
+        }
+        // 夢見奏
+        if (keyword === '夢見奏' || keyword === 'yumemisou') {
+            window.open('http://www.yumemisou.net/', '_blank');
+            return;
+        }
+        // らき☆すた
+        if (keyword === 'らき☆すた') {
+            window.open('https://www.lucky-ch.com/', '_blank');
+            return;
+        }
+        // 楽天市場
+        if (keyword === '楽天市場' || keyword === '楽天' || keyword === 'Rakuten' || keyword === 'rakuten') {
+            window.open('https://www.rakuten.co.jp/', '_blank');
+            return;
+        }
+        // ひぐらしのなく頃に
+        if (keyword === 'ひぐらしのなく頃に') {
+            window.open('https://07th-expansion.net/hig_gensaku', '_blank');
+            return;
+        }
+
+if (keyword === 'おま環') {
+    let userAgent = navigator.userAgent;
+    let platform = navigator.platform;
+    let language = navigator.language;
+    let onlineStatus = navigator.onLine ? 'オンライン' : 'オフライン';
+    let screenWidth = window.screen.width;
+    let screenHeight = window.screen.height;
+    let innerWidth = window.innerWidth;
+    let innerHeight = window.innerHeight;
+    
+    // デバイス情報
+    let deviceMemory = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : '不明';
+    let hardwareConcurrency = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} コア` : '不明';
+    let touchSupport = 'タッチサポート: ' + ('ontouchstart' in window ? '対応' : '非対応');
+    
+    // モバイル情報
+    let isMobile = /Mobi|Android/i.test(userAgent) ? 'モバイル端末' : 'デスクトップ端末';
+    
+    // GPU情報（WebGLを使ってGPU情報を取得）
+    let gpuInfo = getGPUInfo();
+
+    // CPUクロック速度の推測
+    let estimatedCpuSpeed = estimateCpuSpeed();
+
+    // ブラウザのビジョン
+    let browserDetails = userAgent.split(')')[0].split('(')[1];
+
+    let details = `
+User-Agent: ${userAgent}
+プラットフォーム: ${platform}
+言語: ${language}
+画面解像度: ${screenWidth}x${screenHeight}
+使用中のブラウザ幅/高さ: ${innerWidth}x${innerHeight}
+ブラウザで確認できたメモリ: ${deviceMemory}
+ブラウザで確認できたCPUコア数: ${hardwareConcurrency}
+推測されたCPUクロック速度(ちょっとけいさんした。): ${estimatedCpuSpeed} GHz
+${touchSupport}
+デバイスタイプ: ${isMobile}
+推測されたGPU情報: ${gpuInfo}
+    `;
+    alert(details);
+    return;
+}
+
+function getGPUInfo() {
+    try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (!gl) {
+            return 'WebGLがサポートされていません';
+        }
+        
+        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+        if (!debugInfo) {
+            return 'GPU情報を取得できません';
+        }
+
+        const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+        const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+        
+        return `${vendor} - ${renderer}`;
+    } catch (e) {
+        return 'GPU情報の取得に失敗しました';
+    }
+}
+
+
+
+
+
+
+function estimateCpuSpeed() {
+    const start = performance.now();
+
+    // 高負荷の計算処理（例えば、大きな素数計算を使う）
+    let count = 0;
+    let limit = 1000000;  // 大きな数を計算してみる
+    for (let i = 2; i < limit; i++) {
+        if (isPrime(i)) count++;
+    }
+
+    const end = performance.now();
+    const elapsedTime = end - start;  // 処理時間（ms）
+
+    // 計算処理時間と回数の関係を基に推測する
+    const estimatedSpeed = (elapsedTime / limit) * 1000;  // 1回あたりの時間を秒単位で求める
+    
+    // 推定クロック速度を反比例関数で調整
+    const a = 4.9; // 最大速度
+    const b = 2.5; // スケール係数（調整）
+    const adjustedSpeed = (a - b / (1 / estimatedSpeed)).toFixed(2);
+
+    return adjustedSpeed;  // GHz単位で返す
+}
+
+function isPrime(n) {
+    if (n <= 1) return false;
+    for (let i = 2; i <= Math.sqrt(n); i++) {
+        if (n % i === 0) return false;
+    }
+    return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Fdivチェッカー
+if (keyword === 'FDIVチェック' || keyword === 'FDIVチェッカー' || keyword === 'FDIVバグチェック' || keyword === 'FDIVバグチェッカー' || keyword === 'Fdivチェック' || keyword === 'Fdivチェッカー' || keyword === 'Fdivバグチェック' || keyword === 'Fdivバグチェッカー'  || keyword === 'fdivチェック' || keyword === 'fdivチェッカー' || keyword === 'fdivバグチェック' || keyword === 'fdivバグチェッカー') {
+    // 有名なFDIVバグの割り算
+    const dividend = 4195835;
+    const divisor = 3145727;
+
+    // 正しい結果を計算
+    const correctResult = dividend / divisor;
+
+    // FDIVバグが発生する場合の誤った結果（例: バグによる誤差）
+    const buggyResult = 1.333739068902037589; // 実際のFDIVバグによる誤差
+
+    // より大きな許容誤差を設定
+    const tolerance = 1e-4; 
+
+    // 誤差が許容範囲を超えているか確認
+    if (Math.abs(correctResult - buggyResult) > tolerance) {
+        alert('FDIVバグ発生！' + correctResult);
+    } else {
+        alert('問題ありません' + correctResult);
+    }
+
+    return;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//アニメーションここから
+
+
+
+
+if (keyword === 'ジンギスカン') {
+    const container = document.getElementById('mainarea');
+
+    // ジンギスカン要素を作成
+    const jingisukan = document.createElement('div');
+    jingisukan.style.position = 'fixed';
+    jingisukan.style.zIndex = '1192';
+    jingisukan.style.left = '5%'; // 固定位置
+    jingisukan.style.top = '8%';
+    jingisukan.style.fontSize = '6vh';
+    jingisukan.style.whiteSpace = 'wrap';
+    jingisukan.style.lineHeight = '7.5vh';
+    jingisukan.style.letterSpacing = '3px'; 
+    jingisukan.style.color = '#fff';
+    jingisukan.style.textShadow = '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 3px 3px 0 #000';
+    jingisukan.style.fontFamily = ' "Kosugi Maru", "Arial", sans-serif';
+    jingisukan.style.userSelect = 'none';
+    jingisukan.style.filter = ' opacity(80%)';
+
+    // container 要素に追加
+    container.appendChild(jingisukan);
+
+    // 表示するテキストの行
+    const lines = [
+        '「１１９２つくろうジンギスカーン。',
+        '　７９４坊さんジンギスカーン。',
+        '　１９４１発ジンギスカーン。',
+        '　ひつじ～ひつじ～ひつじ肉～♪」'
+    ];
+    
+    let lineIndex = 0;
+    let charIndex = 0;
+
+    function displayNextCharacter() {
+        if (lineIndex < lines.length) {
+            if (charIndex < lines[lineIndex].length) {
+                jingisukan.innerHTML += lines[lineIndex][charIndex];
+                charIndex++;
+                setTimeout(displayNextCharacter, 100); // 文字表示の間隔（100ms）
+            } else {
+                // 現在の行が表示し終わったら、改行する
+                jingisukan.innerHTML += '<br>';
+                charIndex = 0;
+                lineIndex++;
+                setTimeout(displayNextCharacter, 500); // 行の間隔（500ms）
+            }
+        }
+    }
+
+    // 文字を一文字ずつ表示
+    displayNextCharacter();
+    setTimeout(() => {
+        container.removeChild(jingisukan);
+    }, 12000);
+    return;
+}
+
+
+
+
+
+
+
+
+
+
+
+if (keyword === 'flash') {
+    const container = document.getElementById('mainarea');
+
+    // kitaatwo要素を作成
+    const kitaatwo = document.createElement('div');
+    kitaatwo.style.position = 'fixed';
+    kitaatwo.style.zIndex = '2525';
+    kitaatwo.style.left = '50%'; // 中央に配置
+    kitaatwo.style.bottom = '0'; // 画面の一番下に固定
+    kitaatwo.style.transform = 'translate(-50%)'; // 水平方向の中央揃え
+    kitaatwo.style.fontSize = `${100 / 8.5}vh`;
+    kitaatwo.style.whiteSpace = 'nowrap';
+    kitaatwo.style.letterSpacing = '3px'; 
+    kitaatwo.style.color = 'cyan';
+    kitaatwo.style.textShadow = '1px 0px 3px rgba(0, 0, 0, 1), -1px 0px 3px rgba(0, 0, 0, 1), 0px 1px 3px rgba(0, 0, 0, 1), 0px -1px 3px rgba(0, 0, 0, 1)';
+    kitaatwo.style.fontFamily = ' MS P Gothic, "Arial", sans-serif';
+    kitaatwo.style.fontWeight = 'bold';
+    kitaatwo.style.userSelect = 'none';
+    kitaatwo.style.filter = ' contrast(100%)';
+
+    // 表示するテキスト
+    kitaatwo.innerHTML = 'ｷﾀ―――(ﾟ∀ﾟ)―――― !!';
+
+    // container 要素に追加
+    container.appendChild(kitaatwo);
+
+    // 3秒後に要素を削除
+    setTimeout(() => {
+        container.removeChild(kitaatwo);
+    }, 3000);
+
+    return;
+}
+
+if (keyword === 'saccubus' || keyword === 'さきゅばす') {
+    const container = document.getElementById('mainarea');
+
+    // saccubus要素を作成
+    const saccubus = document.createElement('div');
+    saccubus.style.position = 'fixed';
+    saccubus.style.zIndex = '2525';
+    saccubus.style.left = '50%'; // 中央に配置
+    saccubus.style.bottom = `${100 / 8.5}vh`; // 画面の一番下に固定
+    saccubus.style.transform = 'translate(-50%)'; // 水平方向の中央揃え
+    saccubus.style.fontSize = `${100 / 8.5}vh`;
+    saccubus.style.whiteSpace = 'nowrap';
+    saccubus.style.letterSpacing = '-2px'; 
+    saccubus.style.color = 'cyan';
+    saccubus.style.textAlign = 'center';
+    saccubus.style.textShadow = '1px 0px 0 cyan, 2px 0px 0 cyan, 3px 0px 0 cyan, 4px 0px 0 cyan, 5px 0px 0 cyan, 6px 0px 0 cyan, 7px 0px 0 cyan, 8px 0px 0 cyan';
+    saccubus.style.filter = 'drop-shadow(1px 0px 1px rgba(0, 0, 0, 1)) ' +
+                           'drop-shadow(-1px 0px 1px rgba(0, 0, 0,  1)) ' +
+                           'drop-shadow(0px 1px 1px rgba(0, 0, 0,  1)) ' +
+                           'drop-shadow(0px -1px 1px rgba(0, 0, 0,  1)) blur(1px) contrast(90%)';
+    saccubus.style.fontFamily = ' MS Gothic, "Arial", sans-serif';
+    saccubus.style.fontWeight = 'bold'
+    saccubus.style.userSelect = 'none';
+
+    // 表示するテキスト
+    saccubus.innerHTML = 'テキスト見本';
+
+    // container 要素に追加
+    container.appendChild(saccubus);
+
+    // 3秒後に要素を削除
+    setTimeout(() => {
+        container.removeChild(saccubus);
+    }, 3000);
+
+    return;
+}
+
+
+if (keyword === 'html5') {
+    const container = document.getElementById('mainarea');
+
+    // html5要素を作成
+    const htmlfive = document.createElement('div');
+    htmlfive.style.position = 'fixed';
+    htmlfive.style.zIndex = '2525';
+    htmlfive.style.left = '50%'; // 中央に配置
+    htmlfive.style.bottom = `${200 / 8.5}vh`; // 画面の一番下に固定
+    htmlfive.style.transform = 'translate(-50%)'; // 水平方向の中央揃え
+    htmlfive.style.fontSize = `${100 / 8.5}vh`;
+    htmlfive.style.whiteSpace = 'nowrap';
+    htmlfive.style.letterSpacing = '0px'; 
+    htmlfive.style.color = 'cyan';
+    htmlfive.style.webkitTextStrokeWidth = '1px';
+    htmlfive.style.webkitTextStrokeColor = 'cyan';
+    htmlfive.style.textShadow = `
+        3px 3px 0 rgba(0, 0, 0, 0.35),
+        3px -3px 0 rgba(0, 0, 0, 0.35),
+        -3px 3px 0 rgba(0, 0, 0, 0.35),
+        -3px -3px 0 rgba(0, 0, 0, 0.35)
+    `;
+    htmlfive.style.filter = 'blur(0.5px)'
+    htmlfive.style.fontFamily = ' ＭＳ Ｐゴシック, "Arial", sans-serif';
+    htmlfive.style.fontWeight = '900';
+    htmlfive.style.userSelect = 'none';
+
+    // 表示するテキスト
+    htmlfive.innerHTML = 'テキスト見本';
+
+    // container 要素に追加
+    container.appendChild(htmlfive);
+
+    // 3秒後に要素を削除
+    setTimeout(() => {
+        container.removeChild(htmlfive);
+    }, 3000);
+
+    return;
+}
+
+
+
+
+
+
+
+
+if (keyword === 'ｷﾀ―――(ﾟ∀ﾟ)―――― !!' || keyword === 'ｷﾀ━(ﾟ∀ﾟ)━!'|| keyword === 'ｷﾀ━━━━(ﾟ∀ﾟ)━━━━!!' ) {
+    const container = document.getElementById('mainarea');
+
+    // ｷﾀ―――(ﾟ∀ﾟ)―――― !! 要素を作成
+    const kitaa = document.createElement('div');
+    kitaa.textContent = 'ｷﾀ―――(ﾟ∀ﾟ)―――― !!';
+    kitaa.style.color = 'white';
+    kitaa.style.position = 'fixed';
+    kitaa.style.right = '-400px';
+    kitaa.style.top = '0%';
+    kitaa.style.fontFamily = ' MS Gothic, "Arial", sans-serif';
+    kitaa.style.fontSize = '4em';
+    kitaa.style.fontWeight = 'bold';
+    kitaa.style.letterSpacing = '-2px';
+    kitaa.style.transform = 'scaleX(1.0)';
+    kitaa.style.textShadow = '1px 0px 0 #fff, 2px 0px 0 #fff, 3px 0px 0 #fff, 4px 0px 0 #fff, 5px 0px 0 #fff, 6px 0px 0 #fff, 7px 0px 0 #fff, 8px 0px 0 #fff';
+    kitaa.style.filter = 'drop-shadow(1px 0px 1px rgba(0, 0, 0, 1)) ' +
+                           'drop-shadow(-1px 0px 1px rgba(0, 0, 0,  1)) ' +
+                           'drop-shadow(0px 1px 1px rgba(0, 0, 0,  1)) ' +
+                           'drop-shadow(0px -1px 1px rgba(0, 0, 0,  1)) blur(1px) contrast(100%)';
+    kitaa.style.fontFamily = ' MS Gothic, "Arial", sans-serif';
+    kitaa.style.whiteSpace = 'nowrap';
+    kitaa.style.userSelect = 'none';
+
+    // container 要素に追加
+    container.appendChild(kitaa);
+
+    // FPS設定
+    const fps = 20;
+    const interval = 1000 / fps; // ミリ秒単位でのフレーム間隔
+
+    // アニメーション関数
+    function animateKitaa() {
+        const start = Date.now(); // アニメーション開始時間
+        const duration = 4000; // アニメーションの期間（4秒）
+        const extraWidth = 1200; // 追加する幅
+        const screenWidth = window.innerWidth + extraWidth;
+
+        function frame() {
+            const timePassed = Date.now() - start;
+            const progress = timePassed / duration;
+            const position = Math.min(screenWidth * progress - 800, screenWidth);
+            
+            kitaa.style.right = `${position}px`;
+
+            if (progress < 1) {
+                setTimeout(frame, interval); // 次のフレームを設定
+            } else {
+                // アニメーションが終わったら要素を削除
+                kitaa.remove();
+            }
+        }
+
+        frame();
+    }
+    // アニメーション開始
+    animateKitaa();
+    return;
+}
+
+
+
+
+
+if (keyword === '真っ赤な誓い') {
+    const container = document.getElementById('mainarea');
+
+    // 真っ赤な誓い  要素を作成
+    const makka = document.createElement('div');
+    makka.textContent = '真っ赤な誓いいいいいいいいいいいいいいいいいいいいいい';
+    makka.style.color = 'red';
+    makka.style.position = 'fixed';
+    makka.style.right = '-400px';
+    makka.style.top = '0%';
+    makka.style.fontFamily = ' MS Gothic, "Arial", sans-serif';
+    makka.style.fontSize = '4em';
+    makka.style.fontWeight = '100';
+    makka.style.letterSpacing = '-2px';
+    makka.style.transform = 'scaleX(1.0)';
+    makka.style.textShadow = '1px 0px 0 #f00, 2px 0px 0 #f00, 3px 0px 0 #f00, 4px 0px 0 #f00, 5px 0px 0 #f00, 6px 0px 0 #f00, 7px 0px 0 #f00, 8px 0px 0 #f00';
+    makka.style.filter = 'drop-shadow(1px 0px 1px rgba(0, 0, 0, 1)) ' +
+                           'drop-shadow(-1px 0px 1px rgba(0, 0, 0,  1)) ' +
+                           'drop-shadow(0px 1px 1px rgba(0, 0, 0,  1)) ' +
+                           'drop-shadow(0px -1px 1px rgba(0, 0, 0,  1)) blur(1px) contrast(100%)';
+    makka.style.whiteSpace = 'nowrap';
+    makka.style.userSelect = 'none';
+
+    // container 要素に追加
+    container.appendChild(makka);
+
+    // FPS設定
+    const fps = 20;
+    const interval = 1000 / fps; // ミリ秒単位でのフレーム間隔
+
+    // アニメーション関数
+    function animateMakka() {
+        const start = Date.now(); // アニメーション開始時間
+        const duration = 3500; // アニメーションの期間（4秒）
+        const extraWidth = 2400; // 追加する幅
+        const screenWidth = window.innerWidth + extraWidth;
+
+        function frame() {
+            const timePassed = Date.now() - start;
+            const progress = timePassed / duration;
+            const position = Math.min(screenWidth * progress - 2200, screenWidth);
+            
+            makka.style.right = `${position}px`;
+
+            if (progress < 1) {
+                setTimeout(frame, interval); // 次のフレームを設定
+            } else {
+                // アニメーションが終わったら要素を削除
+                makka.remove();
+            }
+        }
+
+        frame();
+    }
+    // アニメーション開始
+    animateMakka();
+    return;
+}
+
+
+
+
+
+
+if (keyword === 'Wwww' || keyword === 'Wwwww' || keyword === 'Wwwwwww' || keyword === 'Wwwwwwww' || keyword === 'wwww' || keyword === 'wwwww' || keyword === 'wwwwww' || keyword === 'wwwwwww' || keyword === 'wwwwwwww' || keyword === 'ｗｗｗｗ' || keyword === 'ｗｗｗｗｗ' || keyword === 'ｗｗｗｗｗｗ' || keyword === 'ｗｗｗｗｗｗｗ' || keyword === 'ｗｗｗｗｗｗｗｗ') {
+    const container = document.getElementById('mainarea');
+
+    // wwww 要素を作成
+    const wwww = document.createElement('div');
+    wwww.textContent = 'ｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗ';
+    wwww.style.color = '#00ff00';
+    wwww.style.position = 'fixed';
+    wwww.style.right = '-400px';
+    wwww.style.top = '0%';
+    wwww.style.fontFamily = ' MS Gothic, "Arial", sans-serif';
+    wwww.style.fontSize = '4em';
+    wwww.style.fontWeight = '100';
+    wwww.style.letterSpacing = '-12px';
+    wwww.style.transform = 'scaleX(1.0)';
+    wwww.style.textShadow = '1px 0px 0 #00ff00, 2px 0px 0 #00ff00, 3px 0px 0 #00ff00, 4px 0px 0 #00ff00, 5px 0px 0 #00ff00, 6px 0px 0 #00ff00, 7px 0px 0 #00ff00, 8px 0px 0 #00ff00';
+    wwww.style.filter = 'drop-shadow(1px 0px 1px rgba(0, 0, 0, 1)) ' +
+                           'drop-shadow(-1px 0px 1px rgba(0, 0, 0,  1)) ' +
+                           'drop-shadow(0px 1px 1px rgba(0, 0, 0,  1)) ' +
+                           'drop-shadow(0px -1px 1px rgba(0, 0, 0,  1)) blur(1px) contrast(100%)';
+    wwww.style.whiteSpace = 'nowrap';
+    wwww.style.userSelect = 'none';
+
+    // container 要素に追加
+    container.appendChild(wwww);
+
+    // FPS設定
+    const fps = 20;
+    const interval = 1000 / fps; // ミリ秒単位でのフレーム間隔
+
+    // アニメーション関数
+    function animateWwww() {
+        const start = Date.now(); // アニメーション開始時間
+        const duration = 4000; // アニメーションの期間（4秒）
+        const extraWidth = 2400; // 追加する幅
+        const screenWidth = window.innerWidth + extraWidth;
+
+        function frame() {
+            const timePassed = Date.now() - start;
+            const progress = timePassed / duration;
+            const position = Math.min(screenWidth * progress - 1200, screenWidth);
+            
+            wwww.style.right = `${position}px`;
+
+            if (progress < 1) {
+                setTimeout(frame, interval); // 次のフレームを設定
+            } else {
+                // アニメーションが終わったら要素を削除
+                wwww.remove();
+            }
+        }
+
+        frame();
+    }
+    // アニメーション開始
+    animateWwww();
+    return;
+}
+
+
+
+
+
+
+
+
+if (keyword === 'きしめん' || keyword === 'きしめええん' || keyword === 'きしめえええん' || keyword === 'きしめええええん' || keyword === 'きしめえええええん' || keyword === 'きしめええええええん' || keyword === 'きしめえええええええん' || keyword === 'きしめええええええええん' || keyword === 'きしめえええええええええん' || keyword === 'きしめええええええええええん' || keyword === 'きしめえええええええええええん' || keyword === 'きしめええええええええええええん') {
+    const container = document.getElementById('mainarea');
+
+    // kishimen 要素を作成
+    const kishimen = document.createElement('div');
+    kishimen.textContent = 'きしめええええええええええええええええええん';
+    kishimen.style.color = '#ff8080';
+    kishimen.style.position = 'fixed';
+    kishimen.style.right = '-400px';
+    kishimen.style.top = '0%';
+    kishimen.style.fontFamily = ' MS Gothic, "Arial", sans-serif';
+    kishimen.style.fontSize = '4em';
+    kishimen.style.fontWeight = '100';
+    kishimen.style.letterSpacing = '-2px';
+    kishimen.style.transform = 'scaleX(1.0)';
+    kishimen.style.textShadow = '1px 0px 0 #ff8080, 2px 0px 0 #ff8080, 3px 0px 0 #ff8080, 4px 0px 0 #ff8080, 5px 0px 0 #ff8080, 6px 0px 0 #ff8080, 7px 0px 0 #ff8080, 8px 0px 0 #ff8080, 9px 0px 0 #ff8080';
+    kishimen.style.filter = 'drop-shadow(1px 0px 1px rgba(0, 0, 0, 1)) ' +
+                           'drop-shadow(-1px 0px 1px rgba(0, 0, 0,  1)) ' +
+                           'drop-shadow(0px 1px 1px rgba(0, 0, 0,  1)) ' +
+                           'drop-shadow(0px -1px 1px rgba(0, 0, 0,  1)) blur(1px) contrast(100%)';
+    kishimen.style.whiteSpace = 'nowrap';
+    kishimen.style.userSelect = 'none';
+
+    // container 要素に追加
+    container.appendChild(kishimen);
+
+    // FPS設定
+    const fps = 20;
+    const interval = 1000 / fps; // ミリ秒単位でのフレーム間隔
+
+    // アニメーション関数
+    function animateKishimen() {
+        const start = Date.now(); // アニメーション開始時間
+        const duration = 4000; // アニメーションの期間（4秒）
+        const extraWidth = 2400; // 追加する幅
+        const screenWidth = window.innerWidth + extraWidth;
+
+        function frame() {
+            const timePassed = Date.now() - start;
+            const progress = timePassed / duration;
+            const position = Math.min(screenWidth * progress - 1200, screenWidth);
+            
+            kishimen.style.right = `${position}px`;
+
+            if (progress < 1) {
+                setTimeout(frame, interval); // 次のフレームを設定
+            } else {
+                // アニメーションが終わったら要素を削除
+                kishimen.remove();
+            }
+        }
+
+        frame();
+    }
+    // アニメーション開始
+    animateKishimen();
+    return;
+}
+
+
+
+
+
+
+
+
+
+
+
+if (keyword === '⊂二二二（  ＾ω＾）二⊃  ﾌﾞｰﾝ') {
+    const container = document.getElementById('mainarea');
+
+    // ブーン要素を作成
+    const boon = document.createElement('div');
+    boon.textContent = '⊂二二二（ ＾ω＾）二⊃ ﾌﾞｰﾝ';
+    boon.style.color = 'white';
+    boon.style.position = 'fixed';
+    boon.style.left = '-400px';
+    boon.style.top = '65%';
+    boon.style.webkitTextStroke = '1px black';
+    boon.style.fontFamily = ' MS Gothic, "Arial", sans-serif';
+    boon.style.fontSize = '2em';
+    boon.style.fontWeight = '900';
+    boon.style.filter = 'drop-shadow(0px 0px 20px rgba(0, 0, 0, 1))';
+    boon.style.whiteSpace = 'nowrap';
+
+    // container 要素に追加
+    container.appendChild(boon);
+
+    // アニメーション関数
+    function animateBoon() {
+        const start = Date.now(); // アニメーション開始時間
+        const duration = 3000; // アニメーションの期間（3秒）
+        const extraWidth = 400; // 追加する幅
+        const screenWidth = window.innerWidth + extraWidth;
+
+        function frame() {
+            const timePassed = Date.now() - start;
+            const progress = timePassed / duration;
+
+            boon.style.left = `${Math.min(screenWidth * progress - 200, screenWidth)}px`;
+
+            if (progress < 1) {
+                requestAnimationFrame(frame);
+            } else {
+                // アニメーションが終わったら要素を削除
+                boon.remove();
+            }
+        }
+
+        frame();
+    }
+    // アニメーション開始
+    animateBoon();
+    return;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // ぼかし
+        if (keyword === 'ぼかし') {
+  	const mainareain = document.getElementById('mainareain');
+	mainareain.style.transition = 'filter 1s linear';
+	mainareain.style.filter = 'blur(2px)';
+            return;
+        }
+        // 白黒
+        if (keyword === '白黒') {
+  	 const mainareain = document.getElementById('mainareain');
+	mainareain.style.transition = 'filter 3s linear';
+	mainareain.style.filter = 'grayscale(100%)';
+            return;
+        }
+        // 明るい
+        if (keyword === '明るい' || keyword === '明るく') {
+  	 const mainareain = document.getElementById('mainareain');
+	mainareain.style.transition = 'filter 1s linear';
+	mainareain.style.filter = 'brightness(125%)';
+            return;
+        }
+        // 暗い
+        if (keyword === '暗い' || keyword === '暗く') {
+  	 const mainareain = document.getElementById('mainareain');
+	mainareain.style.transition = 'filter 1s linear';
+	mainareain.style.filter = 'brightness(50%)';
+            return;
+        }
+        // 鮮やか
+        if (keyword === '鮮やか' || keyword === '鮮やかに') {
+  	 const mainareain = document.getElementById('mainareain');
+	mainareain.style.transition = 'filter 0.5s linear';
+	mainareain.style.filter = 'saturate(150%)';
+            return;
+        }
+        // 斜め
+        if (keyword === '斜め' || keyword === 'ななめ') {
+  	const container = document.getElementById('container');
+	container.style.transition = 'transform 1s linear';
+	container.style.transform = 'rotate(1deg)'; // 斜めに45度回転
+            return;
+        }
+        // 斜め
+        if (keyword === '反転') {
+  	const container = document.getElementById('container');
+	container.style.transition = 'transform 1s linear';
+	container.style.transform = 'rotateY(180deg)'; // 反転
+            return;
+        }
+        // 逆さ
+        if (keyword === '逆さ' || keyword === '逆さま' || keyword === '上下反転') {
+  	const container = document.getElementById('container');
+	container.style.transition = 'transform 1s linear';
+	container.style.transform = 'rotateX(180deg)'; // 反転
+            return;
+        }
+
+if (keyword === '元通り') {
+    const mainareain = document.getElementById('mainareain');
+    container.style.transform = 'rotate(0deg)';
+    mainareain.style.filter = 'blur(0px)'
+    mainareain.style.filter = 'grayscale(0%)'
+    mainareain.style.filter = 'saturate(100%)';
+    mainareain.style.filter = 'brightness(100%)';
+    return;
+}
+
+	
+
+
+
+
+    }
+
+    if (keyword) {
+        // Google検索を新しいタブで開く
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(keyword)}`, '_blank');
+
+        // ローカルストレージにキーワードを保存
+        let keywords = JSON.parse(localStorage.getItem('popularKeywords')) || [];
+        
+        // キーワードが既に存在するか確認
+        const keywordIndex = keywords.indexOf(keyword);
+
+        if (keywordIndex === -1) {
+            keywords.push(keyword);
+        } else {
+            keywords.splice(keywordIndex, 1);
+            keywords.push(keyword);
+        }
+
+        localStorage.setItem('popularKeywords', JSON.stringify(keywords));
+
+        // ラジオボタンの選択を保存
+        localStorage.setItem('selectedSearchOption', selectedSearchOption);
+
+        // キーワードリストを更新
+        updateKeywordList();
+    }
+});
+
+
+
+
+
+function updateKeywordList() {
+    const keywords = JSON.parse(localStorage.getItem('popularKeywords')) || [];
+    const keywordList = document.getElementById('keywordList');
+    
+    // 現在のリストの子要素を全て削除
+    keywordList.innerHTML = '';
+
+    // 最大表示数
+    const maxItems = 35;
+
+    // 最新のキーワードから maxItems 個を表示
+    const itemsToShow = keywords.slice(-maxItems);
+
+    itemsToShow.forEach(function(keyword) {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `https://www.google.com/search?q=${encodeURIComponent(keyword)}`;
+        a.textContent = keyword;
+
+        // 文字数に応じたクラスの設定
+        if (keyword.length >= 7) {
+            a.className = 'txt1';
+        } else if (keyword.length >= 4) {
+            a.className = 'txt3';
+        } else if (keyword.length > 0) {
+            a.className = 'txt5';
+        }
+
+        // 新しいアイテムをリストの最初に追加
+        keywordList.insertBefore(li, keywordList.firstChild);
+        li.appendChild(a);
+    });
+}
+
+// ページ読み込み時にキーワードリストを更新
+window.addEventListener('load', updateKeywordList);
+
+</script>
+</body>
+</html>
